@@ -103,3 +103,12 @@ Parse all lints:       `grep "^## \[.*lint" wiki/log.md`
 - **Pages updated**: [[index.md]] (Syntheses section populated for the first time)
 - **Contradictions flagged**: no
 - **Notes**: First filed synthesis in the wiki. Drew from [[Context Engineering]], [[Context Rot]], [[Just-in-Time Context Retrieval]], [[Context Compaction]], [[Agentic Search]], [[Agent Skills]], [[Long-Running Agent]], [[Claude Agent SDK]]. Seven practices organized around the governing principle "smallest possible set of high-signal tokens." High confidence — all three context engineering sources are mutually reinforcing. Main gap: no quantitative thresholds for when context rot becomes practically significant.
+
+## [2026-05-10] tooling | qmd search integration
+
+- **Source**: https://github.com/tobi/qmd
+- **Pages created**: none
+- **Pages updated**: [[qmd]] (major rewrite — installation commands, model table, MCP integration config, CLI commands, active role in wiki), [[CLAUDE.md Schema]] (QUERY Step 1 updated to two-source candidate discovery; INGEST gets new Step 7 for index refresh)
+- **Files created**: `.mcp.json` (project-level MCP server config: `qmd mcp`)
+- **Contradictions flagged**: no
+- **Notes**: Implements Phase 5d tooling from the [[LLM Wiki Pattern]] source. qmd is a local hybrid search engine (BM25 + vector embeddings + LLM re-ranking) that exposes a native MCP server. `.mcp.json` at the project root registers `qmd:query`, `qmd:get`, `qmd:multi_get`, `qmd:status` as native Claude Code tools. QUERY Step 1 now unions candidates from index.md and qmd:query, with fallback to index.md alone if qmd is unavailable. INGEST Step 7 runs `qmd update --collection wiki` after each new source. Terminal setup required before integration is active: `npm install -g @tobilu/qmd`, `qmd collection add /Users/manasnarkar/Documents/llm-wiki/wiki --name wiki`, `qmd embed` (optional — skip for BM25-only mode, needed for semantic search; ~2.1GB model download on first run).

@@ -89,7 +89,10 @@ List every entity and concept the source touches. For each one:
 Add or update entries for the new source page and any entity/concept pages that changed substantially. Use the expanded index table format once the wiki has content.
 
 **Step 6 — Append to `wiki/log.md`.**
-This is always the last step. Use the log format defined below.
+Use the log format defined below.
+
+**Step 7 — Refresh the qmd index.**
+Run `qmd update --collection wiki` via the Bash tool to re-index new and modified pages. This keeps semantic search current after every ingest. Skip if qmd is not installed.
 
 **Contradiction Rule**: If new information contradicts an existing claim, do not silently overwrite it. Add a `> [!warning] Contradiction` callout block immediately below the conflicting claim, naming the source of the conflict and what it says instead. Flag `Contradictions flagged: yes` in the log entry.
 
@@ -99,7 +102,10 @@ This is always the last step. Use the log format defined below.
 
 **Triggered by**: "query: [question]", "q: [question]", or a natural question directed at the wiki.
 
-**Step 1 — Read `wiki/index.md`** to identify candidate pages.
+**Step 1 — Identify candidate pages using two sources:**
+- Read `wiki/index.md` for structural context (page types, counts, table summaries).
+- If the `qmd` MCP tool is available, call `qmd:query` with the query string (`collection: wiki`, `min_score: 0.3`) to surface semantically relevant pages via hybrid search.
+- Union the candidates from both sources. If qmd is unavailable, use index.md alone.
 
 **Step 2 — Read relevant pages.** Read all pages that plausibly contain relevant information. Prefer breadth — better to read 10 pages and discard 5 than to miss a key cross-reference.
 
